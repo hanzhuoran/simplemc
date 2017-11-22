@@ -14,8 +14,8 @@
 #include "xsection.h"
 #include "geometry.h"
 
-const int source_number=100000;
-const int iteration=40;
+const int source_number=10000;
+const int iteration=5;
 const double delta_d = 1E-15;
 //const double Trm = 298.15;
 
@@ -30,7 +30,7 @@ int main ()
 //cout <<"Y" << fissionBank[0].getY() << endl;
 //cout <<"Z" << fissionBank[0].getZ() << endl;
     double k[iteration]= {0};
-    double pitch = 4.0; 
+    double pitch = 3.6; 
     double R = D/2;
     double x0, y0, z0;
     x0 = y0 = pitch/2;
@@ -81,7 +81,7 @@ int main ()
  						{
  							sourceBank[j].scattering(isotope);
 
- 							break;
+ 						break;
  						}
  						case 2: // Capture
  						{
@@ -163,5 +163,14 @@ int main ()
     	average_k = average_k + k[s]/iteration;
 	}
 	cout<<"keff = "<<average_k<<endl;
+    double sum = 0;
+    double std;
+    for (int s = 0; s < iteration; s++)
+    {
+        cout << k[s]<<endl;
+        sum = (k[s]-average_k)*(k[s]-average_k)+sum;
+    }
+    std = sqrt(sum/(iteration-1));
+    cout<<"standard deviation is "<< std << endl;
 	return 0;
 }
