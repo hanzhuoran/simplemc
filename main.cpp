@@ -34,7 +34,7 @@ int main ()
     double R = D/2;
     double x0, y0, z0;
     x0 = y0 = pitch/2;
-    z0 = L/2;
+    z0 = x0;
     R = R*coeff;
     x0 = x0*coeff;
     y0 = y0*coeff;
