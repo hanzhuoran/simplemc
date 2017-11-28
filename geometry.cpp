@@ -24,28 +24,28 @@ double dis_z_plane(double z, double w, double z0)
 }
 
 //Distance to a cylinder parallel to z-axis
-double dis_z_cylinder(double x, double y, double u, double v, 
-	double x0, double y0, double R)
+double dis_z_sphere(double x, double y, double z, double u, double v, 
+    double w, double x0, double y0, double z0, double R)
 {
-	double x1, y1, a, k, c, d;
+	double x1, y1, z1, k, c, d;
     x1 = x-x0;
     y1 = y-y0;
-    a = u*u+v*v;
-    k = x1*u+y1*v;
-    c = x1*x1+y1*y1-R*R;
-    if (a == 0 || k*k-a*c < 0) 
+    z1 = z-z0;
+    k = x1*u+y1*v+z1*w;
+    c = x1*x1+y1*y1+z1*z1-R*R;
+    if (k*k-c < 0) 
     {
         d = 1000;      
         //No intersections with the cylinder. set d to a very large value
     } 
     else if (c < 0) 
     {
-        d = (-k+sqrt(k*k-a*c))/a;
+        d = -k+sqrt(k*k-c);
     } 
     // c >=0
-    else if ((-k-sqrt(k*k-a*c)) > 0) 
+    else if ((-k-sqrt(k*k-c)) > 0) 
     {
-        d = (-k-sqrt(k*k-a*c))/a;
+        d = -k-sqrt(k*k-c);
     }
     else 
     {
@@ -56,21 +56,20 @@ double dis_z_cylinder(double x, double y, double u, double v,
 }
 
 //Distance to collison
-double dis_collision(Neutron n)
+double dis_collision(Neutron n, double factor, double coeff)
 {
 	double d;
-	double f = factor*factor*factor;
+	double f = factor*factor; // effective decrease is f^2
     switch (n.getregion()) 
     {
         case 1:
         {
-            d = Exp_dis(Sigma_F(4, n.getE())/f);
-            break;
+            d = Exp_dis(Sigma_F(4, n.getE(),coeff)/f);
         }
         case -1:
         {
         	//we don't expand water
-            d = Exp_dis(Sigma_M(4, n.getE())/f);
+            d = Exp_dis(Sigma_M(4, n.getE()));
             break;
         }
         default:
@@ -90,7 +89,8 @@ double dis_min(Neutron n, double x0, double y0, double z0, double R)
     d[3] = dis_y_plane(n.getY(), n.getOmegay(), -y0);
     d[4] = dis_z_plane(n.getZ(), n.getOmegaz(), z0);
     d[5] = dis_z_plane(n.getZ(), n.getOmegaz(), -z0);
-    d[6] = dis_z_cylinder(n.getX(), n.getY(), n.getOmegax(), n.getOmegay(), 0, 0, R);
+    d[6] = dis_z_sphere(n.getX(), n.getY(), n.getZ(),
+        n.getOmegax(), n.getOmegay(), n.getOmegaz(), 0, 0, 0, R);
     for (int i = 0; i < 7; i++) 
     {
         if (d[i] > 0 && d[i] < m) //if negative, neutron goes away

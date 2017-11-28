@@ -16,10 +16,11 @@ double dis_x_plane(double x, double u, double x0);
 double dis_y_plane(double y, double v, double y0); 
 //Distance to a plane perpendicular to z at z0, given z, w
 double dis_z_plane(double z, double w, double z0); 
-//Distance to a cylinder parallel to z-axis
-double dis_z_cylinder(double x, double y, double u, double v, double x0, double y0, double R); 
+//Distance to a sphere
+double dis_z_sphere(double x, double y, double z, double u, double v, 
+	double w, double x0, double y0, double z0, double R); 
 //Distance to collison
-double dis_collision(Neutron n); 
+double dis_collision(Neutron n, double factor, double coeff); 
 //Minimum distance to a surface.
 double dis_min(Neutron n, double x0, double y0, double z0, double R);
 // Check if the neutron is out of the box, reflection boudary condition?

@@ -145,22 +145,24 @@ double Sigma_M(int i, double E)
 }
 
 //Calculate the Macroscopic cross section in Fuel. i= 1-O, 2-U235, 3-U238, 4-total
-double Sigma_F(int i, double E)
+double Sigma_F(int i, double E, double coeff)
 {
 	double s;
+    double f = coeff*coeff*coeff;
     switch (i)
     {
         case 1:
-            s = NUO2_O*SigmaO(3,E);
+            s = NUO2_O/f*SigmaO(3,E);
             break;
         case 2:
-            s = NUO2_U235*SigmaU235(4,E);
+            s = NUO2_U235/f*SigmaU235(4,E);
             break;
         case 3:
-            s = NUO2_U238*SigmaU238(3,E);
+            s = NUO2_U238/f*SigmaU238(3,E);
             break;
         case 4:
-            s = NUO2_O*SigmaO(3,E)+NUO2_U235*SigmaU235(4,E)+NUO2_U238*SigmaU238(3,E);
+            s = NUO2_O/f*SigmaO(3,E)+
+            NUO2_U235/f*SigmaU235(4,E)+NUO2_U238/f*SigmaU238(3,E);
             break;
         default:
             break;
@@ -170,7 +172,7 @@ double Sigma_F(int i, double E)
 
 //Sample the isotope
 //
-int Col_iso(Neutron n)
+int Col_iso(Neutron n, double coeff)
 {
 	int i;
 	double sO,sH,sU235;
@@ -183,9 +185,9 @@ int Col_iso(Neutron n)
         case 1: // Fuel
         {
 //std::cout<<"in fuel "<<std::endl;
- 			sO = Sigma_F(1,E)/Sigma_F(4,E);
+ 			sO = Sigma_F(1,E,coeff)/Sigma_F(4,E,coeff);
 //std::cout<<"sO"<<sO<<std::endl;
- 			sU235 = (Sigma_F(1,E)+Sigma_F(2,E))/Sigma_F(4,E);
+ 			sU235 = (Sigma_F(1,E,coeff)+Sigma_F(2,E,coeff))/Sigma_F(4,E,coeff);
 //std::cout<<"sU235"<<sU235<<std::endl;
  			r = Uni_dis();
 //std::cout<<"sample"<<r<<std::endl;

@@ -7,8 +7,8 @@
 #define Neutron__H
 
 #define Troom 298.15
-#define D 3
-#define L 50
+#define D 30
+//#define L 50
 
 #include <stdio.h>
 #include <math.h>
@@ -31,6 +31,7 @@ class Neutron
 public:
 	//constuctor
 	Neutron();
+	Neutron(double coeff);
 	//new neutron
 	Neutron(double newx,double newy,double newz,
 		double newE,double newT,

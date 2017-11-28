@@ -14,31 +14,49 @@
 #include "xsection.h"
 #include "geometry.h"
 
-const int source_number=10000;
-const int iteration=5;
+const int source_number=10;
 const double delta_d = 1E-15;
 //const double Trm = 298.15;
+// change in VD
+//const double factor=1;
+//change in geometry
+//const double coeff=1;
 
 using namespace std;
 
-int main ()
+int main (int argc, char* argv[])
 {
+    double factor;
+    double coeff;
+    factor = atof(argv[1]);
+    cout<<"factor is "<< factor << endl;
+    coeff = atof(argv[2]);
+    cout<<"coeff is "<< coeff << endl;
 	srand((unsigned)time(0));
-	vector <Neutron> sourceBank(source_number); //source
+    int iteration;
+    int inactive;
+    int active;
+    inactive = 10;
+    active = 20;
+    iteration = active+inactive;
+	vector <Neutron> sourceBank;
+    for (int i = 1; i < iteration; i++)
+    {
+        Neutron f(coeff);
+        sourceBank.push_back(f);
+    }
+    //source
     vector <Neutron> fissionBank;
-//cout <<"X" << fissionBank[0].getX() << endl;
-//cout <<"Y" << fissionBank[0].getY() << endl;
-//cout <<"Z" << fissionBank[0].getZ() << endl;
     double k[iteration]= {0};
-    double pitch = 3.6; 
+    double pitch = 54;
     double R = D/2;
     double x0, y0, z0;
-    x0 = y0 = pitch/2;
-    z0 = x0;
+    x0 = y0 = z0 = pitch/2;
     R = R*coeff;
-    x0 = x0*coeff;
-    y0 = y0*coeff;
-    z0 = z0*coeff;
+    // Expand Fuel w/ Water
+    x0 = x0;
+    y0 = y0;
+    z0 = z0;
     double dis_surface, dis_coll;
     dis_surface = dis_coll = 0;
     int isotope;
@@ -49,7 +67,7 @@ int main ()
     for (int i = 0; i < iteration; i++)
     {
 //cout << "new "<<sourceBank[0].getweight()<<endl;
-//cout << "size"<<sourceBank.size()<<endl;
+//cout << "size "<<sourceBank.size()<<endl;
 //cout<<endl;
 //cout << "iter"<<i<<endl;
 
@@ -60,19 +78,20 @@ int main ()
     		{
 
 				dis_surface = dis_min(sourceBank[j], x0, y0, z0, R);
-                dis_coll = dis_collision(sourceBank[j]);
+                dis_coll = dis_collision(sourceBank[j], factor, coeff);
 //cout <<"X" << sourceBank[j].getX() << endl;
 //cout <<"Y" << sourceBank[j].getY() << endl;
 //cout <<"Z" << sourceBank[j].getZ() << endl;
-//cout << dis_coll <<"dis" <<dis_surface <<endl;                
+//cout <<" dis2col: "<<dis_coll << endl;
+//cout <<" dis2surf " <<dis_surface <<endl;                
                 if(dis_coll < dis_surface)
                 {
-// cout<<"Collison"<<endl;
+//cout<<"Collison"<<endl;
 					sourceBank[j].setposition((sourceBank[j].getX()+sourceBank[j].getOmegax()*(dis_coll+delta_d)),
 						(sourceBank[j].getY()+sourceBank[j].getOmegay()*(dis_coll+delta_d)),
 						(sourceBank[j].getZ()+sourceBank[j].getOmegaz()*(dis_coll+delta_d)));
                     //Sampling isotope and reaction
-                    isotope = Col_iso(sourceBank[j]); 
+                    isotope = Col_iso(sourceBank[j],coeff); 
  					reaction = Col_rea(sourceBank[j], isotope);
 //cout<< isotope <<" and " <<reaction << endl;
  					switch (reaction)
@@ -155,22 +174,26 @@ int main ()
         	}
 
         }
+ //       cout<<"k["<<i<<"]="<<k[i]<<endl;
  //cout << "new dot"<<sourceBank[0].getweight()<<endl;
     }
     // How to calculate k-eff? Average all batches?
-    for (int s = 0; s < iteration; s++) 
+    double kt=0;
+    //2 inactive cycle
+    for (int s = inactive; s < iteration; s++) 
     {
-    	average_k = average_k + k[s]/iteration;
+    	kt = kt + k[s];
 	}
+//    cout<<kt<<endl;
+    average_k = kt/active;
 	cout<<"keff = "<<average_k<<endl;
     double sum = 0;
     double std;
-    for (int s = 0; s < iteration; s++)
+    for (int s = inactive; s < iteration; s++)
     {
-        cout << k[s]<<endl;
         sum = (k[s]-average_k)*(k[s]-average_k)+sum;
     }
-    std = sqrt(sum/(iteration-1));
-    cout<<"standard deviation is "<< std << endl;
+    std = sqrt(sum/(active-1));
+    cout<<"standard deviation is "<< std*100000 << "pcm" << endl;
 	return 0;
 }

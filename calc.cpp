@@ -28,6 +28,12 @@ double Circ_dis()
 {
 	return Uni_dis()*2*pi;
 }
+//Return sampling angle in o to pi
+double SemiCirc_dis()
+{
+	return Uni_dis()*pi;
+}
+
 // G1 sampling for target nuclei velocity
 //g1(x) = 4/sqrt(pi)*x^2*exp(-x^2)
 double G1_dis()

@@ -10,13 +10,13 @@
 // 1/(cm*barn)
 #define NH2O_H 6.6911e-2 
 #define NH2O_O 3.3455e-2   
-#define NUO2_O 4.7284e-2   
-#define NUO2_U235 9.4567e-4  
-#define NUO2_U238 2.2696e-2  
+#define NUO2_O 4.7081e-2   
+#define NUO2_U235 1.1769e-2  
+#define NUO2_U238 1.1769e-2  
 
-#include<stdio.h>
-#include<iostream>
-#include<math.h>
+#include <stdio.h>
+#include <iostream>
+#include <math.h>
 #include "neutron.h"
 #include "calc.h"
 
@@ -34,12 +34,12 @@ double SigmaO(int i, double E);
 double SigmaU235(int i, double E);        
 //U238
 double SigmaU238(int i, double E); 
-//Calculate the Macroscopic cross section in Fuel. i=0-H, 1-O, 2-U235, 3-U238, 4-total
-double Sigma_F(int i, double E);        
+//Calculate the Macroscopic cross section in Fuel. i=0-H, 1-O, 2-U235, 3-U238, 4-total, f is the expansion factor in 1 dimension
+double Sigma_F(int i, double E, double coeff);        
 //Calculate the Macroscopic cross section in Moderator. i=0-H, 1-O, 2-U235, 3-U238, 4-total
 double Sigma_M(int i, double E);       
 //Sample the isotope
-int Col_iso(Neutron n);   
+int Col_iso(Neutron n, double coeff);   
 //Sample the reaction i-isotope return 1-Scatter or 2-Capture or 3-Fission
 int Col_rea(Neutron n, int i);      
 #endif 

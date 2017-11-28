@@ -7,8 +7,6 @@
 #define CALC_H
 
 #define pi 3.14159265358979323846
-#define factor 1.1
-#define coeff 1
 
 #include <stdio.h>
 #include <math.h>
@@ -23,7 +21,9 @@ double Uni_dis();
 //or Delayed Neutron (not implemented)
 double Exp_dis(double Sigma); 
 //Sample gamma from 0 to 2pi   
-double Circ_dis();   
+double Circ_dis();
+//Sample gamma from 0 to pi   
+double SemiCirc_dis();   
 // G1 sampling for target nuclei velocity
 //g1(x) = 4/sqrt(pi)*x^2*exp(-x^2)
 double G1_dis();

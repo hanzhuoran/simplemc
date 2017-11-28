@@ -8,16 +8,37 @@
 // Self Constructor
 Neutron::Neutron()
 {
-    double r, theta, zdot;
-    //Assume fuel diameter is 9 mm
+    double r, theta, phi;
     r = Uni_dis()*D/2;
-    theta = Circ_dis();
-    //Assume 1.2 cm x 1.2 cm x 1.2 cm box
-    zdot = Uni_dis()*L-L/2;
-    x = r*cos(theta);
-    y = r*sin(theta);
-    z = zdot;
-    x = x* coeff;
+    theta = SemiCirc_dis();
+    phi = Circ_dis();
+    x = r*sin(theta)*cos(phi);
+    y = r*sin(theta)*sin(phi);
+    z = r*cos(theta);
+    double mu, gamma;
+    mu = Mu_dis();
+    gamma = Uni_dis()*2*pi;
+    Omegax = sqrt(1-mu*mu)*cos(gamma);
+    Omegay = sqrt(1-mu*mu)*sin(gamma);
+    Omegaz = mu;
+    double newE;
+    newE = Watt_dis();
+    E = newE;
+    T =  Troom;
+    weight = 1;
+    region = 1;
+}
+// Construct with coeff
+Neutron::Neutron(double coeff)
+{
+    double r, theta, phi;
+    r = Uni_dis()*D/2;
+    theta = SemiCirc_dis();
+    phi = Circ_dis();
+    x = r*sin(theta)*cos(phi);
+    y = r*sin(theta)*sin(phi);
+    z = r*cos(theta);
+    x = x*coeff;
     y = y*coeff;
     z = z*coeff;
     double mu, gamma;
@@ -33,7 +54,6 @@ Neutron::Neutron()
     weight = 1;
     region = 1;
 }
-
 // Constructor
 Neutron::Neutron(double newx,double newy,double newz,
 	double newE,double newT,
