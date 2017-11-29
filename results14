@@ -1,0 +1,25 @@
+Wed Nov 29 13:11:41 EST 2017
+factor is 1
+coeff is 1
+source_number is 100000
+keff = 1.08122
+standard deviation is 499.593pcm
+
+Wed Nov 29 13:21:03 EST 2017
+factor is 1
+coeff is 1.4
+source_number is 100000
+keff = 1.08805
+standard deviation is 515.41pcm
+
+########Geo run done.####### 
+
+Wed Nov 29 13:30:25 EST 2017
+factor is 1.4
+coeff is 1
+source_number is 100000
+keff = 1.07926
+standard deviation is 591.016pcm
+
+########VD run done.#######
+

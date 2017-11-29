@@ -14,7 +14,6 @@
 #include "xsection.h"
 #include "geometry.h"
 
-const int source_number=10;
 const double delta_d = 1E-15;
 //const double Trm = 298.15;
 // change in VD
@@ -26,12 +25,15 @@ using namespace std;
 
 int main (int argc, char* argv[])
 {
-    double factor;
-    double coeff;
+    double factor;//VD
+    double coeff;//G
+    int source_number;
     factor = atof(argv[1]);
     cout<<"factor is "<< factor << endl;
     coeff = atof(argv[2]);
     cout<<"coeff is "<< coeff << endl;
+    source_number = atoi(argv[3]);
+    cout<<"source_number is "<< source_number << endl;
 	srand((unsigned)time(0));
     int iteration;
     int inactive;
@@ -69,7 +71,7 @@ int main (int argc, char* argv[])
 //cout << "new "<<sourceBank[0].getweight()<<endl;
 //cout << "size "<<sourceBank.size()<<endl;
 //cout<<endl;
-//cout << "iter"<<i<<endl;
+cout << "iter"<<i<<endl;
 
     	for (int j = 0; j < sourceBank.size(); j++)
     	{
@@ -174,7 +176,7 @@ int main (int argc, char* argv[])
         	}
 
         }
- //       cout<<"k["<<i<<"]="<<k[i]<<endl;
+       cout<<"k["<<i<<"]="<<k[i]<<endl;
  //cout << "new dot"<<sourceBank[0].getweight()<<endl;
     }
     // How to calculate k-eff? Average all batches?
@@ -195,5 +197,6 @@ int main (int argc, char* argv[])
     }
     std = sqrt(sum/(active-1));
     cout<<"standard deviation is "<< std*100000 << "pcm" << endl;
+    cout<<endl;
 	return 0;
 }
